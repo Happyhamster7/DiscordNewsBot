@@ -1,4 +1,5 @@
 import requests
+from datetime import datetime, timedelta, timezone
 from config import MAX_ARTICLES_PER_TOPIC
 
 NEWSAPI_URL = "https://newsapi.org/v2/everything"
@@ -23,8 +24,10 @@ def fetch_articles(topic: str, api_key: str, max_results: int = MAX_ARTICLES_PER
     Returns empty list on any error.
     """
     query = _build_query(topic)
+    from_date = (datetime.now(timezone.utc) - timedelta(days=7)).strftime("%Y-%m-%d")
     params = {
         "qInTitle": query,
+        "from": from_date,
         "sortBy": "publishedAt",
         "language": "en",
         "pageSize": max_results * 2,  # fetch extra for dedup headroom
