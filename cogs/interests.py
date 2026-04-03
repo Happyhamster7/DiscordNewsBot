@@ -9,9 +9,15 @@ class InterestsModal(ui.Modal, title="Set Your Top 3 Interests"):
     interest2 = ui.TextInput(label="Interest 2", placeholder="e.g. AI research", max_length=50)
     interest3 = ui.TextInput(label="Interest 3", placeholder="e.g. climate", max_length=50)
 
-    def __init__(self, guild_id: int):
+    def __init__(self, guild_id: int, existing: list):
         super().__init__()
         self.guild_id = guild_id
+        if len(existing) > 0:
+            self.interest1.default = existing[0]
+        if len(existing) > 1:
+            self.interest2.default = existing[1]
+        if len(existing) > 2:
+            self.interest3.default = existing[2]
 
     async def on_submit(self, interaction: discord.Interaction):
         interests = [
@@ -46,7 +52,9 @@ class InterestsCog(commands.Cog):
         if interaction.guild_id is None:
             await interaction.response.send_message("This bot only works in servers.", ephemeral=True)
             return
-        await interaction.response.send_modal(InterestsModal(guild_id=interaction.guild_id))
+        store = load_store()
+        existing = store.get("users", {}).get(str(interaction.user.id), {}).get("interests", [])
+        await interaction.response.send_modal(InterestsModal(guild_id=interaction.guild_id, existing=existing))
 
 
 async def setup(bot: commands.Bot):
