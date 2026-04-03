@@ -30,14 +30,15 @@ def build_digest_embed(topic: str, articles: list, color_index: int = 0) -> disc
         source = article.get("source", "Unknown")
         published_at = article.get("published_at", "")
         description = article.get("description") or ""
-        if len(description) > 150:
-            description = description[:147] + "..."
+        if len(description) > 120:
+            description = description[:117] + "..."
 
         time_str = _relative_time(published_at)
-        meta = f"{source} · {time_str}" if time_str else source
+        meta = f"-# {source} · {time_str}" if time_str else f"-# {source}"
 
+        # Title links to article but URL is hidden (masked hyperlink)
         name = f"[{title}]({url})" if url else title
-        value = f"{meta}\n{description}" if description else meta
+        value = f"{description}\n{meta}" if description else meta
 
         embed.add_field(name=name, value=value, inline=False)
 
