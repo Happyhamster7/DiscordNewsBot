@@ -4,15 +4,27 @@ from config import MAX_ARTICLES_PER_TOPIC
 NEWSAPI_URL = "https://newsapi.org/v2/everything"
 
 
+def _build_query(topic: str) -> str:
+    """Wrap multi-word topics in quotes for exact phrase matching."""
+    topic = topic.strip()
+    if " " in topic:
+        return f'"{topic}"'
+    return topic
+
+
 def fetch_articles(topic: str, api_key: str, max_results: int = MAX_ARTICLES_PER_TOPIC) -> list:
     """Fetch news articles for a given topic from NewsAPI.
+
+    Uses qInTitle so only articles with the topic in the headline are
+    returned — much more relevant than full-body search.
 
     Returns a normalized list of dicts:
       [{title, url, source, published_at, description}]
     Returns empty list on any error.
     """
+    query = _build_query(topic)
     params = {
-        "q": topic,
+        "qInTitle": query,
         "sortBy": "publishedAt",
         "language": "en",
         "pageSize": max_results * 2,  # fetch extra for dedup headroom
