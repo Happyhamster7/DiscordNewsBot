@@ -1,4 +1,6 @@
 import os
+import datetime
+from zoneinfo import ZoneInfo
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -11,7 +13,7 @@ STORE_PATH = os.path.join(os.path.dirname(__file__), "data", "store.json")
 MAX_ARTICLES_PER_TOPIC = 3
 MAX_SEEN_ARTICLES_PER_GUILD = 200
 MAX_TOPICS_PER_DIGEST = 10
-SCHEDULE_HOURS = 6
+DIGEST_TIME = datetime.time(hour=11, minute=0, tzinfo=ZoneInfo("Australia/Sydney"))
 
 EMBED_COLORS = [0x5865F2, 0x57F287, 0xFEE75C, 0xED4245, 0xEB459E]
 

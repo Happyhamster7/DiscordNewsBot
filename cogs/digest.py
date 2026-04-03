@@ -1,7 +1,7 @@
 import discord
 from discord import app_commands
 from discord.ext import commands, tasks
-from config import NEWSAPI_KEY, SCHEDULE_HOURS
+from config import NEWSAPI_KEY, DIGEST_TIME
 from utils.storage import load_store, save_store
 from utils.embeds import build_digest_embed, build_no_news_embed, build_header_embed
 from services.topic_aggregator import get_all_topics
@@ -16,7 +16,7 @@ class DigestCog(commands.Cog):
     def cog_unload(self):
         self.scheduled_digest.cancel()
 
-    @tasks.loop(hours=SCHEDULE_HOURS)
+    @tasks.loop(time=DIGEST_TIME)
     async def scheduled_digest(self):
         store = load_store()
         for guild_id, guild_data in store.get("guilds", {}).items():
@@ -122,7 +122,7 @@ class DigestCog(commands.Cog):
         embed.add_field(name="Digest Channel", value=channel_mention, inline=False)
         embed.add_field(name="Users with Interests", value=str(user_count), inline=True)
         embed.add_field(name="Unique Topics", value=str(len(topics)), inline=True)
-        embed.add_field(name="Schedule", value=f"Every {SCHEDULE_HOURS}h ({next_run})", inline=True)
+        embed.add_field(name="Schedule", value=f"Daily at 11:00am AEST ({next_run})", inline=True)
         if topics:
             embed.add_field(name="Current Topics", value=", ".join(t.title() for t in topics), inline=False)
 

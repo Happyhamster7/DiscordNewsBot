@@ -29,7 +29,7 @@ async def on_ready():
     digest_cog = bot.cogs.get("DigestCog")
     if digest_cog and not digest_cog.scheduled_digest.is_running():
         digest_cog.scheduled_digest.start()
-        print(f"Digest task started (every {digest_cog.scheduled_digest.hours}h)")
+        print("Digest task started (daily at 11:00am Australia/Sydney)")
 
 
 async def main():
