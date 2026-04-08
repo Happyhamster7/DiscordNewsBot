@@ -1,7 +1,7 @@
 import discord
 from discord import app_commands
 from discord.ext import commands, tasks
-from config import NEWSAPI_KEY, DIGEST_TIME
+from config import DIGEST_TIME
 from utils.storage import load_store, save_store
 from utils.embeds import build_digest_embed, build_no_news_embed, build_header_embed
 from services.topic_aggregator import get_all_topics
@@ -69,7 +69,7 @@ class DigestCog(commands.Cog):
         all_new_articles = []
 
         for i, topic in enumerate(topics):
-            raw_articles = fetch_articles(topic, NEWSAPI_KEY)
+            raw_articles = fetch_articles(topic)
             new_articles = filter_new_articles(raw_articles, seen_urls)[:3]
 
             if new_articles:

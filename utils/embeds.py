@@ -42,7 +42,7 @@ def build_digest_embed(topic: str, articles: list, color_index: int = 0) -> disc
 
         embed.add_field(name=name, value=value, inline=False)
 
-    embed.set_footer(text="Powered by NewsAPI")
+    embed.set_footer(text="Powered by multiple sources")
     return embed
 
 
